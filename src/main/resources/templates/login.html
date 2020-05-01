@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form  th:action="@{/login}" method="post">
+
+    <p th:if="${param.error}">Invalid email or password</p>
+    <p th:if="${param.logout}">Log out</p>
+
+    <label for="username">Email</label>
+    <input type="email" name="username" id="username" >
+
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" >
+
+    <button type="submit">Login</button>
+</form>
+</body>
+</html>

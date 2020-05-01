@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form th:action="@{/logout}"  method="post">
+
+    <button type="submit" name="logout" id="logout">Logout</button>
+
+</form>
+
+<form  th:action="@{/addPost}" th:object="${Post}" method="post"  enctype="multipart/form-data">
+
+    <label th:if="${FailMessage}" th:text="${FailMessage}"></label>
+    <label th:if="${SuccessMessage}" th:text="${SuccessMessage}"></label>
+
+    <label for="file">Add a picture</label>
+    <input type="file" name="file" id="file">
+
+    <label for="title">Add a Title</label>
+    <input type="text" name="title" id="title" >
+
+    <label for="description">Add a description</label>
+    <input type="text" name="description" id="description" >
+
+    <button type="submit">Submit</button>
+</form>
+
+</body>
+</html>
