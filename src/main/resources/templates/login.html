@@ -3,22 +3,57 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Share News</title>
+    <link rel="stylesheet"  th:href="@{/styles/login.css}"  />
+    <link rel="stylesheet"  th:href="@{/styles/common.css}"  />
+    <link rel="stylesheet"  th:href="@{/styles/navbar.css}"  />
+    <script defer src="/js/navbar.js"></script>
+
 </head>
 <body>
 
-<form  th:action="@{/login}" method="post">
+<div id="LoginPage">
 
-    <p th:if="${param.error}">Invalid email or password</p>
-    <p th:if="${param.logout}">Log out</p>
+    <div th:replace="fragments/NavBar"></div>
 
-    <label for="username">Email</label>
-    <input type="email" name="username" id="username" >
+    <main class="Main">
+        <div class="ImageDiv"></div>
 
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" >
+        <div class="FormDiv">
 
-    <button type="submit">Login</button>
-</form>
+                        <form  th:action="@{/login}" method="post">
+
+                            <p th:if="${param.error}" class="TextDanger">Invalid email or password</p>
+                            <p th:if="${param.logout}">You logged Log out</p>
+
+                            <label for="username">Email</label>
+                            <input type="email" name="username" id="username" required>
+
+                            <label for="password">Password</label>
+                            <input type="password" name="password" id="password" required >
+
+                            <label >
+                                <a th:href="@{/forgotPassword}">
+                                    <span style="color: #010066; font-weight: bold;">Forgot password ?</span>
+                                </a>
+
+                            </label>
+
+                            <button type="submit">Login</button>
+
+                            <label >Dont' have an account?
+                                <a   th:href="@{/register}">
+                                    <span style="color: #010066; font-weight: bold;">Sign Up</span>
+                                </a>
+                            </label>
+                        </form>
+
+        </div>
+    </main>
+
+</div>
+
+
+
 </body>
 </html>

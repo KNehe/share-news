@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
+    <nav class="Nav" th:fragment="NavBar">
+
+        <ul class="NavGrid">
+            <div class="NavTitle">
+                <li><a th:href="@{/}" >Share news</a></li>
+            </div>
+
+            <div class="NavLinks">
+                <li ><a id="loginLink" th:href="@{/login}">Login</a></li>
+                <li><a id="signUpLink" th:href="@{/register}">SignUp</a></li>
+            </div>
+
+        </ul>
+
+    </nav>
+
+</body>
+</html>

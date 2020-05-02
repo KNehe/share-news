@@ -1,0 +1,33 @@
+.NavTitle{
+    grid-area: a;
+    font-size: 25px;
+    font-weight: var(--bold);
+    text-transform: uppercase;
+    font-family: var(--font-family);
+}
+
+.NavLinks{
+    grid-area: i;
+    display: flex;
+    justify-content: space-around;
+    font-family: var(--font-family);
+    font-weight: var(--bold);
+}
+
+ul{
+    list-style-type: none;
+}
+
+a{
+    text-decoration: none;
+    color: white;
+
+}
+
+.NavLinks a{
+    transition: font-size 0.3s ease-in;
+}
+
+.NavLinks a:hover{
+    font-size: large ;
+}

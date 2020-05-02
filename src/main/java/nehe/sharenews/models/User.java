@@ -1,9 +1,12 @@
 package nehe.sharenews.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Entity
 public class User {
@@ -14,9 +17,14 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String role;
     private int isEnabled;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String resetPasswordToken;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Date expirationDate;
 
     public User() {
     }
@@ -82,5 +90,21 @@ public class User {
 
     public void setIsEnabled(int isEnabled) {
         this.isEnabled = isEnabled;
+    }
+
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
+
+    public void setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
+    }
+
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
     }
 }

@@ -38,4 +38,14 @@ public class AuthService {
         return userRepository.findByEmail( email );
     }
 
+    public User findUserByToken(String token){
+        return userRepository.findByResetPasswordToken(token);
+    }
+
+    public User updateUser(User user){
+        return userRepository.save(user);
+    }
+
+
+
 }

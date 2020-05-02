@@ -3,26 +3,52 @@
 <head>
     <meta charset="UTF-8" >
     <title>Title</title>
+    <link rel="stylesheet"  th:href="@{/styles/register.css}"  />
+    <link rel="stylesheet"  th:href="@{/styles/common.css}"  />
+    <link rel="stylesheet"  th:href="@{/styles/navbar.css}"  />
+    <script defer src="/js/navbar.js"></script>
 </head>
 <body>
 
-<form  th:action="@{/register}" th:object="${User}" method="post" >
+<div id="RegisterPage">
 
-    <label th:if="${RegistrationError}" th:text="${RegistrationError}"></label>
+    <div th:replace="fragments/NavBar"></div>
 
-    <label for="firstName">First Name</label>
-    <input type="text" name="firstName" id="firstName" >
+    <main class="Main">
+        <div class="ImageDiv"></div>
 
-    <label for="lastName">Last Name</label>
-    <input type="text" name="lastName" id="lastName" >
+        <div class="FormDiv">
 
-    <label for="email">Email</label>
-    <input type="email" name="email" id="email" >
+            <form  th:action="@{/register}" th:object="${User}" method="post" >
 
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" >
+                <p th:if="${RegistrationError}" class="TextDanger" th:text="${RegistrationError}"></p>
 
-    <button type="submit">Submit</button>
-</form>
+                <label for="firstName">First Name</label>
+                <input type="text" name="firstName" id="firstName" required>
+
+                <label for="lastName">Last Name</label>
+                <input type="text" name="lastName" id="lastName" required>
+
+                <label for="username">Email</label>
+                <input type="email" name="username" id="username" required>
+
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" required >
+
+                <button type="submit">Login</button>
+
+                <label >Have  an account?
+
+                    <a  th:href="@{/login}">
+                        <span style="color: #010066; font-weight: bold;" >Login</span>
+                    </a>
+                </label>
+            </form>
+
+        </div>
+    </main>
+
+</div>
+
 </body>
 </html>
