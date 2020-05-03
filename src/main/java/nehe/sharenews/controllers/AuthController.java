@@ -2,6 +2,7 @@ package nehe.sharenews.controllers;
 
 import nehe.sharenews.models.User;
 import nehe.sharenews.services.AuthService;
+import nehe.sharenews.services.EmailService;
 import nehe.sharenews.utils.PasswordReset;
 import nehe.sharenews.utils.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,14 @@ public class AuthController {
     private  AuthService authService;
     private SecurityUtil securityUtil;
     private PasswordReset passwordReset;
+    private EmailService emailService;
 
     @Autowired
-    public AuthController(AuthService authService, SecurityUtil securityUtil, PasswordReset passwordReset) {
+    public AuthController(AuthService authService, SecurityUtil securityUtil, PasswordReset passwordReset, EmailService emailService) {
         this.authService = authService;
         this.securityUtil  =  securityUtil;
         this.passwordReset = passwordReset;
+        this.emailService = emailService;
     }
 
     @GetMapping("/")
@@ -60,12 +63,17 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user, Model model){
+    public ModelAndView registerUser(@ModelAttribute User user, RedirectAttributes redirectAttributes){
 
         //check if user with email is already registered
         if(authService.isEmailExists(user.getEmail())){
-            model.addAttribute("RegistrationError", "Email already in use !" );
-            return "register";
+            redirectAttributes.addFlashAttribute("RegistrationError", "Email already in use !" );
+            return new ModelAndView("redirect:/register");
+        }
+
+        if(user.getPassword().length() < 6){
+            redirectAttributes.addFlashAttribute("RegistrationError", "Password should be at least 6 characters !" );
+            return new ModelAndView("redirect:/register");
         }
 
         var unEncryptedPassword = user.getPassword();
@@ -75,12 +83,12 @@ public class AuthController {
 
             securityUtil.authenticateUser( savedUser , unEncryptedPassword );
 
-            return "redirect:/posts";
+            return new ModelAndView("redirect:/posts");
         }
 
-        model.addAttribute("RegistrationError", "An error occurred ! Try again" );
+        redirectAttributes.addFlashAttribute("RegistrationError", "An error occurred ! Try again" );
 
-        return "register";
+        return new ModelAndView("redirect:/register");
 
     }
 
@@ -134,7 +142,16 @@ public class AuthController {
             return new ModelAndView("redirect:/forgotPassword");
         }
 
-        //TODO SEND EMAIL
+        var resetLink = "http://localhost:8080/resetPassword/"+token;
+
+        var subject = String.format("Click this link to reset your password %s . If you didn't request this please ignore",resetLink);
+
+        var emailText = emailService.sendMail(email,"Share News Reset Password", subject);
+
+        if(emailText == null){
+            redirectAttributes.addFlashAttribute("ErrorMessage","An error occurred while sending email");
+            return new ModelAndView("redirect:/forgotPassword");
+        }
 
         redirectAttributes.addFlashAttribute("SuccessMessage","A password reset link has been sent to your email!");
         return new ModelAndView("redirect:/forgotPassword");
