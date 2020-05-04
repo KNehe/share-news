@@ -1,33 +1,113 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymleaf.org">
+<html lang="en" xmlns:th="http://www.thymleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Posts</title>
+    <link rel="stylesheet"  th:href="@{/styles/post.css}"  />
+    <link rel="stylesheet"  th:href="@{/styles/common.css}"  />
+    <link rel="stylesheet"  th:href="@{/styles/navbar.css}"  />
+    <script defer src="/js/navbar.js"></script>
+
+    <script>
+        const formHandler = (event)=>{
+
+            console.log(event.target)
+
+            const file= document.getElementById("file").value;
+
+            if(!file){
+                event.preventDefault();
+                return document.getElementById("error").innerText = "Add image";
+            }
+
+
+        };
+    </script>
+
 </head>
 <body>
 
-<form th:action="@{/logout}"  method="post">
 
-    <button type="submit" name="logout" id="logout">Logout</button>
+<div id="PostsPage">
 
-</form>
+    <div th:replace="fragments/NavBar"></div>
 
-<form  th:action="@{/addPost}" th:object="${Post}" method="post"  enctype="multipart/form-data">
+    <div class="Main">
 
-    <label th:if="${FailMessage}" th:text="${FailMessage}"></label>
-    <label th:if="${SuccessMessage}" th:text="${SuccessMessage}"></label>
+        <section class="AddPostSection">
 
-    <label for="file">Add a picture</label>
-    <input type="file" name="file" id="file">
+            <form  th:action="@{/addPost}" th:object="${Post}" method="post"  enctype="multipart/form-data" onsubmit="formHandler(event)">
 
-    <label for="title">Add a Title</label>
-    <input type="text" name="title" id="title" >
+                <label class="TextDanger" th:if="${FailMessage}" th:text="${FailMessage}"></label>
+                <label class="TextSuccess" th:if="${SuccessMessage}" th:text="${SuccessMessage}"></label>
+                <label class="TextDanger"><b id="error" ></b></label>
 
-    <label for="description">Add a description</label>
-    <input type="text" name="description" id="description" >
+                <label for="description" ></label>
+                <textarea name="description" id="description" placeholder="Share an event" rows="3" cols="50" required></textarea>
 
-    <button type="submit">Submit</button>
-</form>
+                <div class="PostSubSection">
+
+                    <button type="submit">Post</button>
+
+                    <label for="file" id="ImageUpload">Image</label>
+                    <input type="file" name="file" id="file" >
+
+                </div>
+
+            </form>
+
+        </section>
+
+       <section class="Posts" th:each="Post : ${Posts}">
+
+           <div class="PostsContent">
+
+               <div class="PostedBySection">
+                   <div class="PostedByGraphic"></div>
+                   <h4 th:text="${Post.postByName}"></h4>
+               </div>
+
+               <img src="/Images/background.png" alt="image">
+
+               <div class="PostedDescriptionSection">
+                   <p th:text="${Post.description}"></p>
+               </div>
+
+               <div class="PostCommentCount">
+                   <a th:href="@{'/post/' + ${Post.postId} + '/comments'} ">
+                       <p th:text="${Post.noOfComments + ' comments'}"></p>
+                   </a>
+
+               </div>
+
+               <div class="AddCommentSection">
+
+                   <form  th:action="@{/comment}" method="post" >
+
+                       <p class="TextDanger" th:if="${CommentError}" th:text="${CommentError}"></p>
+
+                       <label for="text"></label>
+                       <input type="text" name="text" id="text" placeholder="Add a comment" required>
+
+                       <input type="hidden" name="postId" th:value="${Post.postId}">
+
+                       <button type="submit">Add</button>
+                   </form>
+
+               </div>
+
+
+           </div>
+
+       </section>
+
+
+    </div>
+
+</div>
+
+
 
 </body>
 </html>

@@ -16,3 +16,7 @@ body{
     border-radius: var(--radius);
     padding: 5px;
 }
+.TextSuccess{
+    color: #6058d1;
+    font-weight: var( --bold);
+}

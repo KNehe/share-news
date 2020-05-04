@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Comments</title>
+    <link rel="stylesheet"  th:href="@{/styles/post.css}"  />
+    <link rel="stylesheet"  th:href="@{/styles/common.css}"  />
+    <link rel="stylesheet"  th:href="@{/styles/navbar.css}"  />
+    <script defer src="/js/navbar.js"></script>
+</head>
+<body>
+
+<div id="PostsPage">
+
+    <div th:replace="fragments/NavBar"></div>
+
+    <div class="Main">
+
+        <div class="PostsContent">
+
+            <section class="Posts" th:each="Comment : ${Comments}">
+                <div class="PostedBySection">
+                    <div class="PostedByGraphic"></div>
+                    <h4 th:text="${Comment.name}"></h4>
+                </div>
+
+                <img src="/Images/background.png" alt="image">
+
+                <div class="PostedDescriptionSection">
+                    <p th:text="${Comment.post.description}"></p>
+                </div>
+            </section>
+
+        </div>
+
+
+
+    </div>
+
+</div>
+
+</body>
+</html>

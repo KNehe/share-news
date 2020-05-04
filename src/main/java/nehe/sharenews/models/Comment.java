@@ -8,7 +8,10 @@ public class Comment {
     @Id
     @GeneratedValue( strategy =  GenerationType.AUTO)
     private Long id;
-    private String comment;
+    private String text;
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -17,9 +20,18 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment( String comment, User user) {
-        this.comment = comment;
+    public Comment( String text, User user,Post post) {
+        this.text = text;
         this.user = user;
+        this.post =post;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 
     public Long getId() {
@@ -31,11 +43,11 @@ public class Comment {
     }
 
     public String getComment() {
-        return comment;
+        return text;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setComment(String text) {
+        this.text = text;
     }
 
     public User getUser() {

@@ -1,0 +1,234 @@
+:root{
+    --font-family: "Courier New";
+    --bold: bold;
+    --radius: 50px;
+    --app-color:purple;
+    --background: rgba(0,0,0,0.1);
+}
+
+#PostsPage{
+    display: grid;
+    grid-template-columns: repeat(12,1fr);
+    grid-template-rows: repeat(2,minmax(75px, auto));
+}
+
+.Nav{
+    grid-column: 1/13;
+    grid-row: 1;
+    background-color: rgba(100,0,100,1);
+    position: fixed;
+    width: 100%;
+}
+.NavGrid{
+    display: grid;
+    grid-template-areas: "a b c d e f g h i";
+    padding-top: 1.2em;
+}
+.Main{
+    grid-column: 1/13;
+    grid-row: 2;
+    background-color: var(--background);
+    justify-self: center;
+    align-self: center;
+    height: 100%;
+}
+
+.AddPostSection{
+    background-color: white;
+    width: 95%;
+    margin: 5px auto 5px auto;
+    box-shadow: inset 1px 1px 1px rgba(0,0,0,0.2),1px 5px 2px rgba(0,0,0,0.2);
+    border-radius: 30px;
+}
+
+.AddPostSection form{
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    margin: 1.4em auto auto auto;
+    padding: .8em;
+}
+
+textarea{
+    border: 2px solid #c74a94;
+    padding-top: 20px;
+    padding-left: 10px;
+    border-radius: var(--radius);
+    outline: none;
+    box-shadow: none;
+    resize: none;
+    color: #272727;
+    text-align:left;
+    text-transform: capitalize;
+    transition: border .3s ease-in;
+}
+textarea:focus{
+    border: 3px solid var(--app-color);
+    outline: none;
+    box-shadow: none;
+}
+
+input[type='file']{
+    display: none;
+}
+
+.PostSubSection{
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.AddPostSection form label{
+    font-family: var(--font-family);
+    font-weight: var(--bold);
+    text-align: center;
+}
+
+#ImageUpload{
+    width: auto;
+    padding:10px;
+    background-color: rgba(200,200,200,0.6);
+    color: black;
+    border-radius: var(--radius);
+    box-shadow: 1px 3px 3px rgba(0,0,0,0.2);
+    transition: background-color .3s ease-in;
+}
+
+#ImageUpload:hover{
+    background-color: rgba(200,200,200,0.2);
+}
+
+.AddPostSection  button{
+    width: 40%;
+    background-color: var(--app-color);
+    border-radius: var(--radius);
+    padding: 10px;
+    border: purple;
+    color: white;
+    box-shadow: 1px 3px 5px rgba(0,0,0,0.4);
+    outline: none;
+    transition: all .5s ease-in;
+}
+
+.AddPostSection button:hover{
+    background-color: #c74a94;
+}
+
+/*posts*/
+.Posts{
+    background-color: white;
+    margin: 5px auto 5px auto;
+    width: 95%;
+    box-shadow:1px 3px 2px rgba(0,0,0,0.2);
+    border-radius: 1.2em;
+    height: auto;
+}
+
+.PostsContent{
+    margin: 1.4em auto auto auto;
+    width: 95%;
+    padding: .5em;
+}
+
+.PostedBySection{
+    display: flex;
+    align-items: baseline;
+    text-transform: capitalize;
+}
+
+.PostedByGraphic{
+    width: 1.2em;
+    height: 1.2em;
+    background-color: #010066;
+    margin-right: .5em;
+    border-radius: var(--radius);
+}
+
+.PostsContent img{
+    min-height: 100%;
+    min-width: 100%;
+    max-height: 100%;
+    max-width: 100%;
+    border-radius: 10px;
+
+}
+
+.PostedDescriptionSection:first-letter{
+    text-transform: uppercase;
+}
+
+.PostCommentCount a{
+    text-align: right;
+    font-weight: bold;
+    transition: all .4s ease-in;
+    color: black;
+}
+
+
+.PostCommentCount a:hover{
+    color: rgba(0,0,200,0.9);
+    text-decoration: underline;
+}
+
+.AddCommentSection button{
+    width: 20%;
+    background-color: var(--app-color);
+    border-radius: var(--radius);
+    padding: 10px;
+    border: purple;
+    color: white;
+    box-shadow: 1px 3px 5px rgba(0,0,0,0.4);
+    outline: none;
+    transition: all .5s ease-in;
+}
+
+.AddCommentSection button:hover{
+    background-color: #c74a94;
+}
+
+input[type="text"]{
+    border: 2px solid #c74a94;
+    border-radius: var(--radius);
+    outline: none;
+    box-shadow: none;
+    resize: none;
+    text-align:left;
+    text-transform: capitalize;
+    transition: border .3s ease-in;
+    padding: 5px;
+}
+
+input[type="text"]:focus{
+    border: 3px solid var(--app-color);
+    outline: none;
+    box-shadow: none;
+}
+
+@media screen and (min-width: 360px){
+    .Main{
+        width: 90%;
+    }
+}
+
+@media screen and (min-width: 600px){
+    .Main{
+        width: 50%;
+    }
+    .AddPostSection{
+        width: 80%;
+    }
+    .Posts{
+        width: 80%;
+    }
+}
+
+
+
+
+
+
+
+
+
+

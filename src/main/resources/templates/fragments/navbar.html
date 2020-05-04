@@ -11,8 +11,15 @@
             </div>
 
             <div class="NavLinks">
-                <li ><a id="loginLink" th:href="@{/login}">Login</a></li>
-                <li><a id="signUpLink" th:href="@{/register}">SignUp</a></li>
+
+                <li sec:authorize="isAnonymous()" ><a id="loginLink" th:href="@{/login}">Login</a></li>
+                <li sec:authorize="isAnonymous()" ><a id="signUpLink" th:href="@{/register}">SignUp</a></li>
+
+                <form th:action="@{/logout}"  method="post" sec:authorize="isAuthenticated()">
+
+                    <button type="submit" name="logout" id="logout">Logout</button>
+
+                </form>
             </div>
 
         </ul>

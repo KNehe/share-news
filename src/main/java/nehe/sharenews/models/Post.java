@@ -10,7 +10,6 @@ public class Post {
     @Id
     @GeneratedValue( strategy =  GenerationType.AUTO)
     private Long id;
-    private String title;
     private String image;
     private String description;
 
@@ -21,21 +20,11 @@ public class Post {
     public Post() {
     }
 
-    public Post(String title, String image, String description, User user) {
-        this.title = title;
+    public Post(String image, String description, User user) {
         this.image = image;
         this.description = description;
         this.user = user;
     }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public Long getId() {
         return id;
     }
