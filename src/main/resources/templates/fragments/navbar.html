@@ -15,10 +15,14 @@
                 <li sec:authorize="isAnonymous()" ><a id="loginLink" th:href="@{/login}">Login</a></li>
                 <li sec:authorize="isAnonymous()" ><a id="signUpLink" th:href="@{/register}">SignUp</a></li>
 
-                <form th:action="@{/logout}"  method="post" sec:authorize="isAuthenticated()">
+                <li sec:authorize="isAuthenticated()" class="UserName">
+                    <small th:text="${FirstName}">UserName</small>
+                </li>
 
-                    <button type="submit" name="logout" id="logout">Logout</button>
-
+                <form class="form" th:action="@{/logout}"  method="post" sec:authorize="isAuthenticated()">
+                        <button type="submit" name="logout" id="logout">
+                            Logout
+                        </button>
                 </form>
             </div>
 

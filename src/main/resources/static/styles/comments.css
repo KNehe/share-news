@@ -1,0 +1,53 @@
+.ViewComments{
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0,0,0,0.08);
+    margin: 5px;
+    border-radius: 25px;
+    padding: 1.2em;
+}
+#Main2{
+    height: 100vh;
+}
+
+.PostedBySection2{
+    display: flex;
+    align-items: baseline;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+.PostedByGraphic2{
+    width: 1.1em;
+    height: 1.1em;
+    background-color: #000bd1;
+    margin-right: .4em;
+    border-radius: var(--radius);
+}
+.PostedDescriptionSection2{
+    display: flex;
+    margin-left: 1.2em;
+    align-items: baseline;
+}
+
+.PostedDescriptionSection2 p{
+    margin: 0;
+    padding: 0;
+}
+
+.PostedDescriptionSection2 p:nth-child(1){
+    font-size: 1.1em;
+}
+.PostedDescriptionSection2 a{
+    color: red;
+    padding-left: 2px;
+    font-size: smaller;
+}
+
+.PostedDescriptionSection2 a:hover{
+    text-decoration: underline;
+}
+.CommentsTitle{
+    padding-left: 1.1em;
+    font-size: 1.1em;
+}

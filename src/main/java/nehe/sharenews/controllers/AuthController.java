@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -97,9 +98,10 @@ public class AuthController {
 
 
     @GetMapping("/posts")
-    public String postsPage(Model model){
+    public String postsPage(Model model, Principal principal){
 
-        model.addAttribute("Posts", postService.getPosts());
+        model.addAttribute("Posts", postService.getPosts(principal));
+        model.addAttribute("FirstName", authService.getFirstName(principal.getName()));
         return "post";
     }
 

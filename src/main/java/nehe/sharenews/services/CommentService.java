@@ -3,6 +3,7 @@ package nehe.sharenews.services;
 import nehe.sharenews.models.Comment;
 import nehe.sharenews.models.CommentViewModel;
 import nehe.sharenews.models.Post;
+import nehe.sharenews.models.PostViewModel;
 import nehe.sharenews.repositories.CommentRepository;
 import nehe.sharenews.repositories.PostRepository;
 import nehe.sharenews.repositories.UserRepository;
@@ -32,11 +33,10 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public List<CommentViewModel> getComments(Long postId){
+    public List<CommentViewModel> getComments(Long postId, String userEmail){
 
         var commentsViewModel = new ArrayList<CommentViewModel>();
 
-        var post = postRepository.findById(postId).orElse(new Post());
         var comments = commentRepository.getCommentsByPostId(postId);
 
         comments.forEach( comment -> {
@@ -49,13 +49,47 @@ public class CommentService {
             var name = firstName + " " + lastName;
 
             viewModel.setId( comment.getId() );
-            viewModel.setName( name );
-            viewModel.setPost( post );
+            viewModel.setCommentedBy( name );
             viewModel.setText( comment.getComment() );
+
+            viewModel.setCanDelete( comment.getUser().getEmail().equals( userEmail ) );
 
             commentsViewModel.add(viewModel);
         });
 
         return commentsViewModel;
+    }
+
+    public List<PostViewModel> getPost(Long postId){
+
+        var posts = new ArrayList<PostViewModel>();
+
+        var postViewModel = new PostViewModel();
+        var post = postRepository.findById(postId).orElse(new Post());
+
+        postViewModel.setPostId(post.getId());
+
+        var count = commentRepository.countById(post.getId());
+        var firstName = userRepository.findFirstName( post.getUser().getId() );
+        var lastName = userRepository.findLastName( post.getUser().getId() );
+        var postByName =  firstName + " " + lastName;
+
+        postViewModel.setPostId(post.getId());
+        postViewModel.setDescription(post.getDescription());
+        postViewModel.setNoOfComments(count);
+        postViewModel.setImage(post.getImage());
+        postViewModel.setPostByName( postByName );
+
+        posts.add(postViewModel);
+
+        return  posts;
+    }
+
+    public void deleteCommentByPostId(Long postId){
+        commentRepository.deleteCommentByPostId(postId);
+    }
+
+    public void deleteCommentByPostIdAndCommentId(Long commentId) {
+        commentRepository.deleteCommentByPostIdAndCommentId(commentId);
     }
 }

@@ -46,6 +46,10 @@ public class AuthService {
         return userRepository.save(user);
     }
 
+    public String getFirstName(String email){
+        return userRepository.getFirstName(email);
+    }
+
 
 
 }

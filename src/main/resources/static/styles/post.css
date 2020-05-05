@@ -165,6 +165,18 @@ input[type='file']{
     color: black;
 }
 
+.PostCommentCount p{
+    text-align: right;
+    font-weight: bold;
+    transition: all .4s ease-in;
+    color: black;
+}
+
+.PostCommentCount p:hover{
+    color: rgba(0,0,200,0.9);
+    text-decoration: underline;
+}
+
 
 .PostCommentCount a:hover{
     color: rgba(0,0,200,0.9);
@@ -203,6 +215,15 @@ input[type="text"]:focus{
     border: 3px solid var(--app-color);
     outline: none;
     box-shadow: none;
+}
+
+.DeletePost{
+    margin-top: 1.2em;
+}
+
+.DeletePost a{
+    color: #e93d18;
+    font-weight: var(--bold);
 }
 
 @media screen and (min-width: 360px){

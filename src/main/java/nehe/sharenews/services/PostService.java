@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class PostService {
          return  postRepository.save(post);
     }
 
-    public List<PostViewModel> getPosts(){
+    public List<PostViewModel> getPosts(Principal principal){
 
          var posts = new ArrayList<PostViewModel>();
 
@@ -55,6 +56,7 @@ public class PostService {
              postViewModel.setNoOfComments(count);
              postViewModel.setImage(post.getImage());
              postViewModel.setPostByName( postByName );
+             postViewModel.setCanDelete( post.getUser().getEmail().equals(principal.getName()));
 
              posts.add(postViewModel);
 
@@ -65,5 +67,9 @@ public class PostService {
 
     public Post getPostById(Long id){
         return postRepository.findById(id).orElse(null);
+    }
+
+    public void deletePost(Long postId) {
+        postRepository.deleteById(postId);
     }
 }

@@ -7,16 +7,26 @@ public class PostViewModel {
     private String description;
     private int noOfComments;
     private String postByName;
+    private boolean canDelete;
 
     public PostViewModel() {
     }
 
-    public PostViewModel(Long postId, String image, String description, int noOfComments, String postByName) {
+    public PostViewModel(Long postId, String image, String description, int noOfComments, String postByName, boolean canDelete) {
         this.postId = postId;
         this.image = image;
         this.description = description;
         this.noOfComments = noOfComments;
         this.postByName = postByName;
+        this.canDelete = canDelete;
+    }
+
+    public boolean isCanDelete() {
+        return canDelete;
+    }
+
+    public void setCanDelete(boolean canDelete) {
+        this.canDelete = canDelete;
     }
 
     public Long getPostId() {

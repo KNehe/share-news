@@ -45,7 +45,7 @@ public class Main extends WebSecurityConfigurerAdapter {
                 .antMatchers("/forgotPassword").permitAll()
                 .antMatchers("/resetPassword/{token}").permitAll()
                 .antMatchers("/resetPassword").permitAll()
-                .antMatchers("/post/{postId}/comments").permitAll()
+                .antMatchers("/post/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

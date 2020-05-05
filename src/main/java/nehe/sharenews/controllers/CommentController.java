@@ -5,13 +5,11 @@ import nehe.sharenews.models.Post;
 import nehe.sharenews.models.User;
 import nehe.sharenews.services.AuthService;
 import nehe.sharenews.services.CommentService;
-import nehe.sharenews.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
@@ -47,19 +45,33 @@ public class CommentController {
         comment.setPost(post);
 
         commentService.addComment(comment);
-
         return "redirect:/posts";
     }
 
     @GetMapping("/post/{postId}/comments")
-    public String getComments(@PathVariable Long postId, RedirectAttributes redirectAttributes){
+    public String getComments(@PathVariable Long postId){
 
-        redirectAttributes.addFlashAttribute("Comments",commentService.getComments(postId));
-
-        return "redirect:/comments";
+        return "redirect:/comments/"+postId;
     }
-    @GetMapping("/comments")
-    public ModelAndView getCommentsPage(){
+
+    @GetMapping("/comments/{postId}")
+    public ModelAndView getCommentsPage(@PathVariable Long postId, Model model, Principal principal){
+
+        var comments = commentService.getComments(postId,principal.getName());
+        var post = commentService.getPost(postId);
+
+        model.addAttribute("PostViewModel",post);
+        model.addAttribute("Comments",comments);
+        model.addAttribute("FirstName", authService.getFirstName(principal.getName()));
+
         return new ModelAndView("comments");
+    }
+
+    @GetMapping("/post/{postId}/comment/{commentId}")
+    public String deleteComment(@PathVariable Long postId,@PathVariable Long commentId){
+
+        commentService.deleteCommentByPostIdAndCommentId(commentId);
+
+        return "redirect:/comments/"+postId;
     }
 }

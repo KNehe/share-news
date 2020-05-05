@@ -4,25 +4,33 @@ public class CommentViewModel {
 
     private Long id;
     private String text;
-    private String name; //user who commented
-    private Post post;
+    private String commentedBy; //user who commented
+    private boolean canDelete;
 
     public CommentViewModel() {
     }
 
-    public CommentViewModel(Long id, String text, String name, Post post) {
+    public CommentViewModel(Long id, String text, String commentedBy, boolean canDelete) {
         this.id = id;
         this.text = text;
-        this.name = name;
-        this.post = post;
+        this.commentedBy = commentedBy;
+        this.canDelete = canDelete;
     }
 
-    public Post getPost() {
-        return post;
+    public boolean isCanDelete() {
+        return canDelete;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
+    public void setCanDelete(boolean canDelete) {
+        this.canDelete = canDelete;
+    }
+
+    public String getCommentedBy() {
+        return commentedBy;
+    }
+
+    public void setCommentedBy(String commentedBy) {
+        this.commentedBy = commentedBy;
     }
 
     public Long getId() {
@@ -41,11 +49,4 @@ public class CommentViewModel {
         this.text = text;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

@@ -7,23 +7,9 @@
     <link rel="stylesheet"  th:href="@{/styles/post.css}"  />
     <link rel="stylesheet"  th:href="@{/styles/common.css}"  />
     <link rel="stylesheet"  th:href="@{/styles/navbar.css}"  />
+
     <script defer src="/js/navbar.js"></script>
-
-    <script>
-        const formHandler = (event)=>{
-
-            console.log(event.target)
-
-            const file= document.getElementById("file").value;
-
-            if(!file){
-                event.preventDefault();
-                return document.getElementById("error").innerText = "Add image";
-            }
-
-
-        };
-    </script>
+    <script defer src="/js/post.js"></script>
 
 </head>
 <body>
@@ -76,8 +62,16 @@
 
                <div class="PostCommentCount">
                    <a th:href="@{'/post/' + ${Post.postId} + '/comments'} ">
-                       <p th:text="${Post.noOfComments + ' comments'}"></p>
+                       <p
+                               th:text="${Post.noOfComments + ' comments'}"
+                               th:if="${Post.noOfComments != 0}"
+                       ></p>
                    </a>
+                       <p
+                               th:text="${Post.noOfComments + ' comments'}"
+                               th:if="${Post.noOfComments == 0}"
+                       >
+                       </p>
 
                </div>
 
@@ -94,6 +88,10 @@
 
                        <button type="submit">Add</button>
                    </form>
+
+                   <div th:if="${Post.canDelete}" class="DeletePost" onclick="HandleDelete(event)">
+                       <a th:href="@{'/post/' + ${Post.postId} } ">Delete</a>
+                   </div>
 
                </div>
 

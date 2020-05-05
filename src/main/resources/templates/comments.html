@@ -7,7 +7,10 @@
     <link rel="stylesheet"  th:href="@{/styles/post.css}"  />
     <link rel="stylesheet"  th:href="@{/styles/common.css}"  />
     <link rel="stylesheet"  th:href="@{/styles/navbar.css}"  />
+    <link rel="stylesheet"  th:href="@{/styles/comments.css}"  />
+
     <script defer src="/js/navbar.js"></script>
+    <script defer src="/js/post.js"></script>
 </head>
 <body>
 
@@ -15,24 +18,54 @@
 
     <div th:replace="fragments/NavBar"></div>
 
-    <div class="Main">
+    <div class="Main" id="Main2">
 
-        <div class="PostsContent">
+        <section class="Posts">
 
-            <section class="Posts" th:each="Comment : ${Comments}">
-                <div class="PostedBySection">
+            <div class="PostsContent" th:each="Post : ${PostViewModel}">
+
+                <div class="PostedBySection" >
                     <div class="PostedByGraphic"></div>
-                    <h4 th:text="${Comment.name}"></h4>
+                    <h4 th:text="${Post.postByName}"></h4>
                 </div>
 
                 <img src="/Images/background.png" alt="image">
 
                 <div class="PostedDescriptionSection">
-                    <p th:text="${Comment.post.description}"></p>
+                    <p th:text="${Post.description}"></p>
                 </div>
-            </section>
 
-        </div>
+                <div class="PostCommentCount">
+                    <a th:href="@{'/post/' + ${Post.postId} + '/comments'} ">
+                        <p th:text="${Post.noOfComments + ' comments'}"></p>
+                    </a>
+
+                </div>
+
+                <div class="CommentsTitle" >
+                    <h4>Comments</h4>
+                </div>
+
+                <div class="ViewComments" th:each="Comment : ${Comments}">
+
+                    <div class="PostedBySection2" >
+                        <div class="PostedByGraphic2"></div>
+                        <p  th:text="${Comment.commentedBy}"></p>
+                    </div>
+
+                    <div class="PostedDescriptionSection2">
+                        <p th:text="${Comment.text}" ></p>
+                        <a th:if="${Comment.canDelete}"
+                           th:href="@{'/post/' + ${Post.postId} } + '/comment/' + ${Comment.id}"
+                           onclick="HandleDelete(event)">Delete</a>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
 
 
 
