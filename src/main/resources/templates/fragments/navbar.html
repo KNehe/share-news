@@ -16,7 +16,10 @@
                 <li sec:authorize="isAnonymous()" ><a id="signUpLink" th:href="@{/register}">SignUp</a></li>
 
                 <li sec:authorize="isAuthenticated()" class="UserName">
-                    <small th:text="${FirstName}">UserName</small>
+
+                        <a  th:href="@{/profile}">
+                            <small th:text="${FirstName}"></small>
+                        </a>
                 </li>
 
                 <form class="form" th:action="@{/logout}"  method="post" sec:authorize="isAuthenticated()">

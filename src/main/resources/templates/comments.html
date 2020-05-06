@@ -25,11 +25,11 @@
             <div class="PostsContent" th:each="Post : ${PostViewModel}">
 
                 <div class="PostedBySection" >
-                    <div class="PostedByGraphic"></div>
+                    <div class="PostedByGraphic"><span class="Icon" th:text="${Post.icon}"></span></div>
                     <h4 th:text="${Post.postByName}"></h4>
                 </div>
 
-                <img src="/Images/background.png" alt="image">
+                <img th:src="${Post.image}" alt="image">
 
                 <div class="PostedDescriptionSection">
                     <p th:text="${Post.description}"></p>
@@ -49,7 +49,7 @@
                 <div class="ViewComments" th:each="Comment : ${Comments}">
 
                     <div class="PostedBySection2" >
-                        <div class="PostedByGraphic2"></div>
+                        <div class="PostedByGraphic2"><span class="Icon" th:text="${Comment.icon}"></span></div>
                         <p  th:text="${Comment.commentedBy}"></p>
                     </div>
 
@@ -57,7 +57,7 @@
                         <p th:text="${Comment.text}" ></p>
                         <a th:if="${Comment.canDelete}"
                            th:href="@{'/post/' + ${Post.postId} } + '/comment/' + ${Comment.id}"
-                           onclick="HandleDelete(event)">Delete</a>
+                           onclick="HandleConfirm(event)">Delete</a>
                     </div>
 
                 </div>

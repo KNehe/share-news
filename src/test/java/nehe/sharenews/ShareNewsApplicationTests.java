@@ -127,9 +127,8 @@ class ShareNewsApplicationTests {
 
 		mockMvc.perform( requestBuilder)
 				.andDo(MockMvcResultHandlers.print())
-				.andExpect( status().isOk() )
-				.andExpect( view().name("register"))
-				.andExpect( model().attribute("RegistrationError","Email already in use !"));
+				.andExpect( status().isFound() )
+				.andExpect( view().name("redirect:/register"));
 
 	}
 
@@ -170,9 +169,8 @@ class ShareNewsApplicationTests {
 
 		mockMvc.perform( requestBuilder)
 				.andDo(MockMvcResultHandlers.print())
-				.andExpect( status().isOk() )
-				.andExpect( view().name("register"))
-				.andExpect( model().attribute("RegistrationError", "An error occurred ! Try again"));
+				.andExpect( status().isFound() )
+				.andExpect( view().name("redirect:/register"));
 
 	}
 

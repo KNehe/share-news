@@ -11,7 +11,7 @@ public interface UserRepository  extends PagingAndSortingRepository<User,Long> {
     User findByResetPasswordToken(String token);
 
     @Query(value="SELECT first_name from user WHERE email=?1", nativeQuery = true)
-    String getFirstName(String email);
+    String getFirstNameByEmail(String email);
 
     @Query(value="SELECT first_name from user WHERE id =?1", nativeQuery = true)
     String findFirstName(Long id);
@@ -20,5 +20,6 @@ public interface UserRepository  extends PagingAndSortingRepository<User,Long> {
     @Query(value="SELECT last_name from user WHERE id =?1", nativeQuery = true)
     String findLastName(Long id);
 
-
+    @Query(value="SELECT last_name from user WHERE email =?1", nativeQuery = true)
+    String getLastNameByEmail(String email);
 }

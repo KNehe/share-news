@@ -50,11 +50,11 @@
            <div class="PostsContent">
 
                <div class="PostedBySection">
-                   <div class="PostedByGraphic"></div>
+                   <div class="PostedByGraphic"><span class="Icon" th:text="${Post.icon}"></span></div>
                    <h4 th:text="${Post.postByName}"></h4>
                </div>
 
-               <img src="/Images/background.png" alt="image">
+               <img th:src="${Post.image}" alt="image">
 
                <div class="PostedDescriptionSection">
                    <p th:text="${Post.description}"></p>
@@ -89,7 +89,7 @@
                        <button type="submit">Add</button>
                    </form>
 
-                   <div th:if="${Post.canDelete}" class="DeletePost" onclick="HandleDelete(event)">
+                   <div th:if="${Post.canDelete}" class="DeletePost" onclick="HandleConfirm(event)">
                        <a th:href="@{'/post/' + ${Post.postId} } ">Delete</a>
                    </div>
 

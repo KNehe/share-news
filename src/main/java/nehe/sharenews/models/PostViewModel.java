@@ -7,18 +7,28 @@ public class PostViewModel {
     private String description;
     private int noOfComments;
     private String postByName;
+    private String icon;
     private boolean canDelete;
 
     public PostViewModel() {
     }
 
-    public PostViewModel(Long postId, String image, String description, int noOfComments, String postByName, boolean canDelete) {
+    public PostViewModel(Long postId, String image, String description, int noOfComments, String postByName, String icon, boolean canDelete) {
         this.postId = postId;
         this.image = image;
         this.description = description;
         this.noOfComments = noOfComments;
         this.postByName = postByName;
+        this.icon = icon;
         this.canDelete = canDelete;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public boolean isCanDelete() {

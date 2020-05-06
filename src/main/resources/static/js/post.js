@@ -10,9 +10,9 @@ const formHandler = (event)=>{
 
 };
 
-const HandleDelete = (event)=>{
+const HandleConfirm = (event)=>{
 
-    const response = confirm("Confirm Deletion");
+    const response = confirm("Confirm operation");
 
     if(response === true){
         //do nothing

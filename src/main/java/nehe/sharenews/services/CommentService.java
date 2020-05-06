@@ -51,6 +51,7 @@ public class CommentService {
             viewModel.setId( comment.getId() );
             viewModel.setCommentedBy( name );
             viewModel.setText( comment.getComment() );
+            viewModel.setIcon( String.valueOf( firstName.charAt(0) ));
 
             viewModel.setCanDelete( comment.getUser().getEmail().equals( userEmail ) );
 
@@ -79,6 +80,7 @@ public class CommentService {
         postViewModel.setNoOfComments(count);
         postViewModel.setImage(post.getImage());
         postViewModel.setPostByName( postByName );
+        postViewModel.setIcon( String.valueOf( firstName.charAt(0) ) );
 
         posts.add(postViewModel);
 

@@ -57,6 +57,7 @@ public class PostService {
              postViewModel.setImage(post.getImage());
              postViewModel.setPostByName( postByName );
              postViewModel.setCanDelete( post.getUser().getEmail().equals(principal.getName()));
+             postViewModel.setIcon(  String.valueOf(firstName.charAt(0)) );
 
              posts.add(postViewModel);
 

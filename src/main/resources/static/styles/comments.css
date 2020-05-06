@@ -18,11 +18,12 @@
 }
 
 .PostedByGraphic2{
-    width: 1.1em;
-    height: 1.1em;
+    width: 1.5em;
+    height: 1.5em;
     background-color: #000bd1;
     margin-right: .4em;
     border-radius: var(--radius);
+    display: grid;
 }
 .PostedDescriptionSection2{
     display: flex;

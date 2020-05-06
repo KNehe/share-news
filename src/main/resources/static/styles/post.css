@@ -59,7 +59,6 @@ textarea{
     resize: none;
     color: #272727;
     text-align:left;
-    text-transform: capitalize;
     transition: border .3s ease-in;
 }
 textarea:focus{
@@ -138,11 +137,12 @@ input[type='file']{
 }
 
 .PostedByGraphic{
-    width: 1.2em;
-    height: 1.2em;
+    width: 1.7em;
+    height: 1.7em;
     background-color: #010066;
     margin-right: .5em;
     border-radius: var(--radius);
+    display: grid;
 }
 
 .PostsContent img{
@@ -206,7 +206,6 @@ input[type="text"]{
     box-shadow: none;
     resize: none;
     text-align:left;
-    text-transform: capitalize;
     transition: border .3s ease-in;
     padding: 5px;
 }

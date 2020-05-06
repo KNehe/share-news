@@ -6,6 +6,7 @@ public class CommentViewModel {
     private String text;
     private String commentedBy; //user who commented
     private boolean canDelete;
+    private String icon;
 
     public CommentViewModel() {
     }
@@ -15,6 +16,14 @@ public class CommentViewModel {
         this.text = text;
         this.commentedBy = commentedBy;
         this.canDelete = canDelete;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public boolean isCanDelete() {

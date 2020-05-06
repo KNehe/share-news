@@ -20,3 +20,8 @@ body{
     color: #6058d1;
     font-weight: var( --bold);
 }
+.Icon{
+    color: white;
+    align-self: center;
+    justify-self: center;
+}

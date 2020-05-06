@@ -7,6 +7,8 @@ import nehe.sharenews.services.PostService;
 import nehe.sharenews.utils.PasswordReset;
 import nehe.sharenews.utils.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -194,4 +196,111 @@ public class AuthController {
 
 
     }
+
+    @GetMapping("/profile")
+    public String getProfilePage(Principal principal, Model model){
+
+        var firstName = authService.getFirstName(principal.getName() );
+
+        var fullName = firstName + " " + authService.getLastName( principal.getName() );
+
+        model.addAttribute("FirstName", firstName );
+
+        model.addAttribute("FullName", fullName );
+
+        model.addAttribute("UserEmail", principal.getName() );
+
+        model.addAttribute("Icon", firstName.charAt(0));
+
+        return  "profile";
+    }
+
+    @PostMapping("/profile/change-email")
+    public String changeEmail( Principal principal ,RedirectAttributes redirectAttributes, @RequestParam String email){
+
+        var user =authService.changeEmail( principal, email );
+
+        if(user != null){
+            redirectAttributes.addFlashAttribute("Success","Operation successful");
+
+            return "redirect:/profile/"+ user.getEmail();
+
+        }
+
+        redirectAttributes.addFlashAttribute("Error","Operation failed");
+
+        return "redirect:/profile";
+
+    }
+
+    @GetMapping("/profile/{email}")
+    public String getProfilePage(@PathVariable String email , Model model){
+
+        var firstName = authService.getFirstName(email);
+
+        var fullName = firstName + " " + authService.getLastName( email );
+
+        model.addAttribute("FirstName", firstName );
+
+        model.addAttribute("FullName", fullName );
+
+        model.addAttribute("UserEmail", email );
+
+        model.addAttribute("Icon", firstName.charAt(0));
+
+        return  "profile";
+    }
+
+    @PostMapping("/profile/change-password")
+    public String changePassword( Principal principal ,
+                                  RedirectAttributes redirectAttributes,
+                                  @RequestParam String password,
+                                  @RequestParam String confirmPassword){
+
+        if( ! password.equals(confirmPassword)){
+
+            redirectAttributes.addFlashAttribute("Error2","Passwords don't match");
+
+            return "redirect:/profile";
+
+        }
+
+        if( password.trim().length() < 6 ){
+
+            redirectAttributes.addFlashAttribute("Error2","At least 6 characters required");
+
+            return "redirect:/profile";
+
+        }
+
+        var user =authService.changePassword( principal, password );
+
+        if(user != null){
+
+            redirectAttributes.addFlashAttribute("Success2","Operation successful");
+
+            return "redirect:/profile";
+
+        }
+
+        redirectAttributes.addFlashAttribute("Error2","Operation failed");
+
+        return "redirect:/profile";
+
+    }
+
+    @PostMapping("/delete-account")
+    public String deleteAccount( Principal principal){
+
+        authService.deleteAccount( principal.getName());
+        SecurityContextHolder.getContext().setAuthentication(null);
+        return "redirect:/account-deleted";
+
+    }
+    @GetMapping("/account-deleted")
+    public String returnLogin(){
+        return "login";
+    }
+
+
 }

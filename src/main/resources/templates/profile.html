@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+
+    <link rel="stylesheet"  th:href="@{/styles/profile.css}"  />
+    <link rel="stylesheet"  th:href="@{/styles/common.css}"  />
+    <link rel="stylesheet"  th:href="@{/styles/navbar.css}"  />
+
+
+    <script defer src="/js/navbar.js"></script>
+    <script defer src="/js/post.js"></script>
+
+</head>
+<body>
+
+
+<div id="ProfilePage">
+
+    <div th:replace="fragments/NavBar"></div>
+
+    <div class="Main">
+
+        <section class="ProfileSection">
+
+            <div class="ProfileNameSection">
+                <div class="ProfileNameGraphic"><span class="Icon" th:text="${Icon}"></span></div>
+                <div class="ProfileName"><h4 th:text="${FullName}"></h4></div>
+            </div>
+
+            <div class="ProfileEmail"><small th:text="${UserEmail}">email@email.com</small></div>
+
+        </section>
+
+        <section class="ChangeEmailSection">
+
+            <p class="TextDanger"
+               th:if="${Error}"
+               style="text-align: center"
+               th:text="${Error}"></p>
+
+            <p class="SuccessMessage"
+               style="text-align: center"
+               th:if="${Success}" th:text="${Success}"></p>
+
+            <form  th:action="@{/profile/change-email}" method="post" >
+
+                <label for="email"></label>
+                <input type="email" name="email" id="email" placeholder="New email" required >
+
+                <button type="submit" onclick="HandleConfirm(event)">Change Email</button>
+
+            </form>
+
+        </section>
+
+        <section class="ChangeEmailSection">
+
+            <p class="TextDanger"
+               th:if="${Error2}"
+               style="text-align: center"
+               th:text="${Error2}"></p>
+
+            <p class="SuccessMessage"
+               style="text-align: center"
+               th:if="${Success2}" th:text="${Success2}"></p>
+
+            <form  th:action="@{/profile/change-password}" method="post" >
+
+                <label for="password"></label>
+                <input type="password" name="password" id="password" placeholder="New password" required>
+
+                <label for="confirmPassword"></label>
+                <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm password" required>
+
+                <button type="submit">Change Password</button>
+
+            </form>
+
+        </section>
+
+        <section class="DeleteAccountSection">
+
+            <form  th:action="@{/delete-account}" method="post" >
+
+                <p class="TextDanger"
+                   th:if="${Error3}"
+                   style="text-align: center"
+                   th:text="${Error2}"></p>
+
+                <button type="submit" onclick="HandleConfirm(event)">Delete account</button>
+
+            </form>
+
+        </section>
+
+
+    </div>
+
+</div>
+
+
+
+</body>
+</html>
