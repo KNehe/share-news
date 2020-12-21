@@ -16,7 +16,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
+import java.util.Arrays;
+import java.util.HashMap;
 
+
+enum ContentType{
+	IMAGE_JPEG,IMAGE_PNG
+}
 
 @Controller
 public class PostController {
@@ -37,15 +43,32 @@ public class PostController {
 
     @PostMapping("/addPost")
     public ModelAndView addPost(@ModelAttribute Post post, Principal principal, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes){
+        
+    	if(file.isEmpty()) {
+    		redirectAttributes.addFlashAttribute("FailureMessage","An image is required");
 
+            return new ModelAndView("redirect:/posts");
+    		
+    	}
+    	
+    	if(Arrays.asList(ContentType.IMAGE_JPEG.toString(), ContentType.IMAGE_PNG.toString()).contains(file.getContentType())) {
+    		redirectAttributes.addFlashAttribute("FailureMessage","File should be an image (JPEG or PNG");
+
+            return new ModelAndView("redirect:/posts");
+    	}
+    	
         var email = principal.getName();
 
         var user = authService.findUserByEmail(email);
 
         post.setUser(user);
+        
+        var fileMetaData  = new HashMap<String,String>();
+        fileMetaData.put("Content-Type", file.getContentType());
+        fileMetaData.put("Content-Length", String.valueOf(file.getSize()));
 
         try {
-
+             // check image
             Path path = Paths.get(uploadDirectory, principal.getName() + file.getOriginalFilename());
 
             Files.write(path,file.getBytes());
