@@ -1,6 +1,5 @@
 package nehe.sharenews.controllers;
 
-import antlr.StringUtils;
 import nehe.sharenews.models.Post;
 import nehe.sharenews.services.AuthService;
 import nehe.sharenews.services.CommentService;
@@ -12,16 +11,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 @Controller
 public class PostController {
