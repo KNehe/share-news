@@ -41,8 +41,8 @@
 }
 .PostedDescriptionSection2 a{
     color: red;
-    padding-left: 2px;
-    font-size: smaller;
+    padding-left: 5px;
+    font-size: .7em;
 }
 
 .PostedDescriptionSection2 a:hover{
@@ -52,3 +52,4 @@
     padding-left: 1.1em;
     font-size: 1.1em;
 }
+

@@ -1,9 +1,12 @@
 package nehe.sharenews.controllers;
 
 import nehe.sharenews.models.Post;
+
 import nehe.sharenews.services.AuthService;
 import nehe.sharenews.services.CommentService;
 import nehe.sharenews.services.PostService;
+import nehe.sharenews.services.UploadService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -11,12 +14,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.Principal;
+import java.util.Arrays;
 
+
+
+enum ContentType{
+	IMAGE_JPEG,IMAGE_PNG
+}
 
 @Controller
 public class PostController {
@@ -24,20 +29,32 @@ public class PostController {
     private PostService postService;
     private AuthService authService;
     private CommentService commentService;
-
-    public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/resources/static/uploads";
-
+    private UploadService uploadService;
 
     @Autowired
-    public PostController(PostService postService, AuthService authService, CommentService commentService) {
+    public PostController(PostService postService, AuthService authService, CommentService commentService,UploadService uploadService) {
         this.postService = postService;
         this.authService = authService;
         this.commentService = commentService;
+        this.uploadService = uploadService;
     }
 
     @PostMapping("/addPost")
     public ModelAndView addPost(@ModelAttribute Post post, Principal principal, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes){
+        
+    	if(file.isEmpty()) {
+    		redirectAttributes.addFlashAttribute("FailureMessage","An image is required");
 
+            return new ModelAndView("redirect:/posts");
+    		
+    	}
+    	
+    	if(Arrays.asList(ContentType.IMAGE_JPEG.toString(), ContentType.IMAGE_PNG.toString()).contains(file.getContentType())) {
+    		redirectAttributes.addFlashAttribute("FailureMessage","File should be an image (JPEG or PNG");
+
+            return new ModelAndView("redirect:/posts");
+    	}
+    	
         var email = principal.getName();
 
         var user = authService.findUserByEmail(email);
@@ -45,17 +62,17 @@ public class PostController {
         post.setUser(user);
 
         try {
-
-            Path path = Paths.get(uploadDirectory, principal.getName() + file.getOriginalFilename());
-
-            Files.write(path,file.getBytes());
-
-            String  [] stringPath = path.toString().split("static");
-
-            post.setImage(stringPath[1]);
+        	
+    		var imageUrl = uploadService.uploadImageWithCloudinary(file);
+    		        
+            post.setImage(imageUrl);
 
         }catch (Exception e){
             e.printStackTrace();
+            
+            redirectAttributes.addFlashAttribute("FailureMessage","An error occurred while uploading image");
+
+            return new ModelAndView("redirect:/posts");
         }
 
 
