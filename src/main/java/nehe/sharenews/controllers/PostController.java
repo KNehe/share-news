@@ -1,9 +1,12 @@
 package nehe.sharenews.controllers;
 
 import nehe.sharenews.models.Post;
+
 import nehe.sharenews.services.AuthService;
 import nehe.sharenews.services.CommentService;
 import nehe.sharenews.services.PostService;
+import nehe.sharenews.services.UploadService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -11,13 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.Arrays;
-import java.util.HashMap;
+
 
 
 enum ContentType{
@@ -30,15 +29,14 @@ public class PostController {
     private PostService postService;
     private AuthService authService;
     private CommentService commentService;
-
-    public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/resources/static/uploads";
-
+    private UploadService uploadService;
 
     @Autowired
-    public PostController(PostService postService, AuthService authService, CommentService commentService) {
+    public PostController(PostService postService, AuthService authService, CommentService commentService,UploadService uploadService) {
         this.postService = postService;
         this.authService = authService;
         this.commentService = commentService;
+        this.uploadService = uploadService;
     }
 
     @PostMapping("/addPost")
@@ -62,23 +60,19 @@ public class PostController {
         var user = authService.findUserByEmail(email);
 
         post.setUser(user);
-        
-        var fileMetaData  = new HashMap<String,String>();
-        fileMetaData.put("Content-Type", file.getContentType());
-        fileMetaData.put("Content-Length", String.valueOf(file.getSize()));
 
         try {
-             // check image
-            Path path = Paths.get(uploadDirectory, principal.getName() + file.getOriginalFilename());
-
-            Files.write(path,file.getBytes());
-
-            String  [] stringPath = path.toString().split("static");
-
-            post.setImage(stringPath[1]);
+        	
+    		var imageUrl = uploadService.uploadImageWithCloudinary(file);
+    		        
+            post.setImage(imageUrl);
 
         }catch (Exception e){
             e.printStackTrace();
+            
+            redirectAttributes.addFlashAttribute("FailureMessage","An error occurred while uploading image");
+
+            return new ModelAndView("redirect:/posts");
         }
 
 
