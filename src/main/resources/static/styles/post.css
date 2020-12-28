@@ -119,18 +119,20 @@ input[type='file']{
 
 /*posts*/
 .Posts{
-    background-color: white;
     margin: 5px auto 5px auto;
     width: 95%;
-    box-shadow:1px 3px 2px rgba(0,0,0,0.2);
-    border-radius: 1.2em;
     height: auto;
+   
 }
 
 .PostsContent{
+    background-color: white;
     margin: 1.4em auto auto auto;
     width: 95%;
-    padding: .5em;
+    padding: .8em;
+    box-shadow:1px 3px 2px rgba(0,0,0,0.2);
+    border-radius: 1.2em;
+
 }
 
 .PostedBySection{

@@ -10,6 +10,9 @@
 
     <script defer src="/js/navbar.js"></script>
     <script defer src="/js/post.js"></script>
+    <script defer src="/webjars/jquery/jquery.min.js"></script>
+    <script defer src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script defer src="/webjars/stomp-websocket/stomp.min.js"></script>
 
 </head>
 <body>
@@ -45,58 +48,8 @@
 
         </section>
 
-       <section class="Posts" th:each="Post : ${Posts}">
-
-           <div class="PostsContent">
-
-               <div class="PostedBySection">
-                   <div class="PostedByGraphic"><span class="Icon" th:text="${Post.icon}"></span></div>
-                   <h4 th:text="${Post.postByName}"></h4>
-               </div>
-
-               <img th:src="${Post.image}" alt="image">
-
-               <div class="PostedDescriptionSection">
-                   <p th:text="${Post.description}"></p>
-               </div>
-
-               <div class="PostCommentCount">
-                   <a th:href="@{'/post/' + ${Post.postId} + '/comments'} ">
-                       <p
-                               th:text="${Post.noOfComments + ' comments'}"
-                               th:if="${Post.noOfComments != 0}"
-                       ></p>
-                   </a>
-                       <p
-                               th:text="${Post.noOfComments + ' comments'}"
-                               th:if="${Post.noOfComments == 0}"
-                       >
-                       </p>
-
-               </div>
-
-               <div class="AddCommentSection">
-
-                   <form  th:action="@{/comment}" method="post" >
-
-                       <p class="TextDanger" th:if="${CommentError}" th:text="${CommentError}"></p>
-
-                       <label for="text"></label>
-                       <input type="text" name="text" id="text" placeholder="Add a comment" required>
-
-                       <input type="hidden" name="postId" th:value="${Post.postId}">
-
-                       <button type="submit">Add</button>
-                   </form>
-
-                   <div th:if="${Post.canDelete}" class="DeletePost" onclick="HandleConfirm(event)">
-                       <a th:href="@{'/post/' + ${Post.postId} } ">Delete</a>
-                   </div>
-
-               </div>
-
-
-           </div>
+       <section class="Posts">
+           
 
        </section>
 

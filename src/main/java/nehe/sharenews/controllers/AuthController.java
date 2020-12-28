@@ -3,7 +3,6 @@ package nehe.sharenews.controllers;
 import nehe.sharenews.models.User;
 import nehe.sharenews.services.AuthService;
 import nehe.sharenews.services.EmailService;
-import nehe.sharenews.services.PostService;
 import nehe.sharenews.utils.PasswordReset;
 import nehe.sharenews.utils.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +26,13 @@ public class AuthController {
     private SecurityUtil securityUtil;
     private PasswordReset passwordReset;
     private EmailService emailService;
-    private PostService postService;
 
     @Autowired
-    public AuthController(AuthService authService, SecurityUtil securityUtil, PasswordReset passwordReset, EmailService emailService, PostService postService) {
+    public AuthController(AuthService authService, SecurityUtil securityUtil, PasswordReset passwordReset, EmailService emailService) {
         this.authService = authService;
         this.securityUtil  =  securityUtil;
         this.passwordReset = passwordReset;
         this.emailService = emailService;
-        this.postService = postService;
     }
 
     @GetMapping("/")
@@ -98,13 +95,7 @@ public class AuthController {
     }
 
 
-    @GetMapping("/posts")
-    public String postsPage(Model model, Principal principal){
-
-        model.addAttribute("Posts", postService.getPosts(principal));
-        model.addAttribute("FirstName", authService.getFirstName(principal.getName()));
-        return "post";
-    }
+    
 
     @GetMapping("/forgotPassword")
     public String forgotPasswordPage(){
