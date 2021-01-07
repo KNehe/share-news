@@ -26,7 +26,7 @@
 
         <section class="AddPostSection">
 
-            <form  th:action="@{/addPost}" th:object="${Post}" method="post"  enctype="multipart/form-data" onsubmit="formHandler(event)">
+            <form id="addPostForm" enctype="multipart/form-data" onsubmit="postFormHandler(event)">
 
                 <label class="TextDanger" th:if="${FailMessage}" th:text="${FailMessage}"></label>
                 <label class="TextSuccess" th:if="${SuccessMessage}" th:text="${SuccessMessage}"></label>

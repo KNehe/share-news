@@ -1,12 +1,13 @@
-const formHandler = (event)=>{
+const postFormHandler = (event)=>{
+    sendPost(event);
 
     const file= document.getElementById("file").value;
 
     if(!file){
         event.preventDefault();
-        return document.getElementById("error").innerText = "Add image";
+        return  showAddPostError("Add image");
     }
-
+    removePostError();
 
 };
 
@@ -33,11 +34,17 @@ const connect = () =>{
 
     stompClient.connect({}, function (frame) {
 
-        stompClient.send("/app/posts", {}, JSON.stringify({'name': $("#name").val()}));
+        stompClient.send("/app/get-posts", {},null);
 
-        
-        stompClient.subscribe('/news-app/posts', function (data) {
-            renderPosts(JSON.parse(data.body));
+        stompClient.subscribe('/news-app/get-posts', function (result) {
+            const parsedResult = JSON.parse(result.body);
+            const error = parsedResult?.body?.failure || undefined;
+
+            console.log("HUGE", error)
+            if(error){
+                return showAddPostError(error);
+             }
+            renderPosts(JSON.parse(result.body));
         });
     });
 }
@@ -48,6 +55,7 @@ connect();
 
 const renderPosts =(posts) =>{
     let content = [];
+
     posts.forEach( post=>{
         content.push(createPostContent(post));
     });
@@ -103,5 +111,30 @@ const html = `
 `;
 
 return html;
+
+}
+
+const sendPost = (event)=>{
+ event.preventDefault();
+
+ const form = new FormData($("#addPostForm")[0]);
+
+ const description = form.get("description");
+ const file = form.get("file").toString();
+
+
+ stompClient.send("/app/post",{}, JSON.stringify({file,description}));
+
+}
+
+const showAddPostError = (errorMessage)=>{
+    if(errorMessage){
+        document.getElementById("error").innerText = errorMessage;
+    }
+}
+
+const removePostError = ()=>{
+    document.getElementById("error").innerText = null;
+
 
 }

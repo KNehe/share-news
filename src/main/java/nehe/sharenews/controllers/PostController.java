@@ -1,5 +1,6 @@
 package nehe.sharenews.controllers;
 
+import nehe.sharenews.models.Failure;
 import nehe.sharenews.models.Post;
 
 import nehe.sharenews.services.AuthService;
@@ -8,19 +9,21 @@ import nehe.sharenews.services.PostService;
 import nehe.sharenews.services.UploadService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.file.Files;
 import java.security.Principal;
-import java.util.Arrays;
 import java.util.List;
 
 import nehe.sharenews.models.PostViewModel;
+import nehe.sharenews.models.RawPost;
 
 import org.springframework.ui.Model;
 
@@ -48,10 +51,63 @@ public class PostController {
         this.uploadService = uploadService;
     }
 
-    @MessageMapping("/posts")
-    @SendTo("/news-app/posts")
-    public List<PostViewModel>  addPost(@ModelAttribute Post post, Principal principal){
+    @MessageMapping("/get-posts")
+    @SendTo("/news-app/get-posts")
+    public List<PostViewModel>  getPosts(Principal principal){
         return postService.getPosts(principal);
+
+    }
+    
+    @MessageMapping("/post")
+    @SendTo("/news-app/get-posts")
+    public ResponseEntity<?>  addPost(RawPost rawPost,
+     Principal principal){
+System.out.println("res: "+ rawPost.getDescription());
+System.out.println("file: "+ rawPost.getFile());
+
+        //return postService.getPosts(principal);
+
+        if(rawPost.getFile() == null) {
+
+            return ResponseEntity.ok(new Failure("An image is required"));
+    		
+        }
+        
+        var email = principal.getName();
+
+        var user = authService.findUserByEmail(email);
+
+        Post post = new Post();
+
+        post.setUser(user);
+
+        try {
+            RandomAccessFile f = new RandomAccessFile(rawPost.getFile(),"r");
+            byte[] fileContent = new byte[(int)f.length()];
+            f.readFully(fileContent);
+            System.out.println("content: "+ fileContent.length) ;
+            var imageUrl = uploadService.uploadImageWithCloudinary(fileContent);
+            post.setImage(imageUrl);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.ok(new Failure("An error occurred while uploading image"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.ok(new Failure("An error occurred while uploading image"));
+        }
+
+
+
+        // if(postService.addPost(post) != null ){
+
+        //     return ResponseEntity.ok(new Failure("Post added"));
+        // }
+
+
+        return ResponseEntity.ok(new Failure("An error occurred try again"));
+
+        
     	// if(file.isEmpty()) {
     	// 	redirectAttributes.addFlashAttribute("FailureMessage","An image is required");
 
