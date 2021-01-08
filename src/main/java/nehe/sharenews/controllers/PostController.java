@@ -9,20 +9,18 @@ import nehe.sharenews.services.PostService;
 import nehe.sharenews.services.UploadService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.file.Files;
 import java.security.Principal;
-import java.util.List;
+import java.util.Arrays;
 
-import nehe.sharenews.models.PostViewModel;
 import nehe.sharenews.models.RawPost;
 
 import org.springframework.ui.Model;
@@ -36,6 +34,7 @@ enum ContentType{
 }
 
 @Controller
+@CrossOrigin
 public class PostController {
 
     private PostService postService;
@@ -53,106 +52,61 @@ public class PostController {
 
     @MessageMapping("/get-posts")
     @SendTo("/news-app/get-posts")
-    public List<PostViewModel>  getPosts(Principal principal){
-        return postService.getPosts(principal);
+    public ResponseEntity<?>  getPosts(Principal principal){
+        return ResponseEntity.ok(postService.getPosts(principal));
 
     }
     
     @MessageMapping("/post")
     @SendTo("/news-app/get-posts")
-    public ResponseEntity<?>  addPost(RawPost rawPost,
-     Principal principal){
-System.out.println("res: "+ rawPost.getDescription());
-System.out.println("file: "+ rawPost.getFile());
+    public ResponseEntity<?>  addPost(RawPost post, Principal principal){
 
-        //return postService.getPosts(principal);
-
-        if(rawPost.getFile() == null) {
-
-            return ResponseEntity.ok(new Failure("An image is required"));
-    		
+        if( post.getImageUrl() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Failure("An image is required"));
         }
         
         var email = principal.getName();
 
         var user = authService.findUserByEmail(email);
+        
+        Post newPost = new Post();
 
-        Post post = new Post();
+        newPost.setUser(user);
+        newPost.setImage(post.getImageUrl());
+        newPost.setDescription(post.getDescription());
 
-        post.setUser(user);
-
-        try {
-            RandomAccessFile f = new RandomAccessFile(rawPost.getFile(),"r");
-            byte[] fileContent = new byte[(int)f.length()];
-            f.readFully(fileContent);
-            System.out.println("content: "+ fileContent.length) ;
-            var imageUrl = uploadService.uploadImageWithCloudinary(fileContent);
-            post.setImage(imageUrl);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.ok(new Failure("An error occurred while uploading image"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.ok(new Failure("An error occurred while uploading image"));
+        if(postService.addPost(newPost) != null ){
+            return ResponseEntity.ok(postService.getPosts(principal));
         }
 
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Failure("An error occurred try again"));     
 
+    }
+    
+    @PostMapping("/image-upload")
+    @ResponseBody
+    public ResponseEntity<?> uploadImage(MultipartFile file){
 
-        // if(postService.addPost(post) != null ){
-
-        //     return ResponseEntity.ok(new Failure("Post added"));
-        // }
-
-
-        return ResponseEntity.ok(new Failure("An error occurred try again"));
-
+       if(file.isEmpty()) {
+         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Failure("Image is required"));    		
+        }
         
-    	// if(file.isEmpty()) {
-    	// 	redirectAttributes.addFlashAttribute("FailureMessage","An image is required");
-
-        //     return new ModelAndView("redirect:/posts");
-    		
-    	// }
     	
-    	// if(Arrays.asList(ContentType.IMAGE_JPEG.toString(), ContentType.IMAGE_PNG.toString()).contains(file.getContentType())) {
-    	// 	redirectAttributes.addFlashAttribute("FailureMessage","File should be an image (JPEG or PNG");
+    	if(Arrays.asList(ContentType.IMAGE_JPEG.toString(), ContentType.IMAGE_PNG.toString()).contains(file.getContentType())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Failure("File should be an image (JPEG or PNG"));    		
 
-        //     return new ModelAndView("redirect:/posts");
-    	// }
+        }
+
+        try {
+    		var imageUrl = uploadService.uploadImageWithCloudinary(file);
+            return ResponseEntity.status(HttpStatus.OK).body(imageUrl);    		
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Failure("An error occurred while uploading ima"));
+        }       
+
     	
-        // var email = principal.getName();
-
-        // var user = authService.findUserByEmail(email);
-
-        // post.setUser(user);
-
-        // try {
-        	
-    	// 	var imageUrl = uploadService.uploadImageWithCloudinary(file);
-    		        
-        //     post.setImage(imageUrl);
-
-        // }catch (Exception e){
-        //     e.printStackTrace();
-            
-        //     redirectAttributes.addFlashAttribute("FailureMessage","An error occurred while uploading image");
-
-        //     return new ModelAndView("redirect:/posts");
-        // }
-
-
-        // if(postService.addPost(post) != null ){
-
-        //     redirectAttributes.addFlashAttribute("SuccessMessage","Post Added");
-
-        //     return new ModelAndView("redirect:/posts");
-        // }
-
-        // redirectAttributes.addFlashAttribute("FailureMessage","An error occurred try again");
-
-        // return new ModelAndView("redirect:/posts");
-
     }
 
     @GetMapping("/post/{postId}")

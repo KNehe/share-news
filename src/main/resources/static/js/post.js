@@ -1,5 +1,4 @@
 const postFormHandler = (event)=>{
-    sendPost(event);
 
     const file= document.getElementById("file").value;
 
@@ -7,7 +6,11 @@ const postFormHandler = (event)=>{
         event.preventDefault();
         return  showAddPostError("Add image");
     }
+
     removePostError();
+
+    sendPost(event);
+
 
 };
 
@@ -39,12 +42,10 @@ const connect = () =>{
         stompClient.subscribe('/news-app/get-posts', function (result) {
             const parsedResult = JSON.parse(result.body);
             const error = parsedResult?.body?.failure || undefined;
-
-            console.log("HUGE", error)
             if(error){
                 return showAddPostError(error);
              }
-            renderPosts(JSON.parse(result.body));
+            renderPosts(parsedResult.body);
         });
     });
 }
@@ -114,16 +115,14 @@ return html;
 
 }
 
-const sendPost = (event)=>{
+const sendPost = async (event)=>{
  event.preventDefault();
 
- const form = new FormData($("#addPostForm")[0]);
+ const description = $('#description').val();
 
- const description = form.get("description");
- const file = form.get("file").toString();
+ const imageUrl = await uploadImage();
 
-
- stompClient.send("/app/post",{}, JSON.stringify({file,description}));
+ stompClient.send("/app/post",{}, JSON.stringify({imageUrl,description}));
 
 }
 
@@ -135,6 +134,33 @@ const showAddPostError = (errorMessage)=>{
 
 const removePostError = ()=>{
     document.getElementById("error").innerText = null;
+}
 
+const uploadImage = async () =>{
+     
+    const form = new FormData($("#addPostForm")[0]);
+
+    return new Promise((resolve,reject)=>{
+        
+    $.ajax({
+        url: "/image-upload",
+        type: "POST",
+        data: form,
+        enctype: 'multipart/form-data',
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function (res) {
+            $("#addPostForm")[0].reset();
+            resolve(res);
+        },
+        error: function (err) {
+            const errMsg = JSON.parse(err.responseText);
+            $("#addPostForm")[0].reset();
+            showAddPostError(errMsg.failure);
+        }
+    });
+
+    });    
 
 }

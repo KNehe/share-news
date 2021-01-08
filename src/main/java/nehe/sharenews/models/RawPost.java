@@ -1,14 +1,11 @@
 package nehe.sharenews.models;
 
-import java.io.File;
 
 public class RawPost {
 
     String description;
 
-    File file;
-
-    
+    String imageUrl;
 
     public String getDescription() {
         return description;
@@ -18,26 +15,25 @@ public class RawPost {
         this.description = description;
     }
 
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
-    }
 
     public RawPost() {
     }
 
-    public RawPost(String description, File file) {
+    public RawPost(String description, String imageUrl) {
         this.description = description;
-        this.file = file;
+        this.imageUrl = imageUrl;
     }
 
-    @Override
-    public String toString() {
-        return "RawPost [description=" + description + ", file=" + file + "]";
+    public String getImageUrl() {
+        return imageUrl;
     }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    
+ 
 
     
     
