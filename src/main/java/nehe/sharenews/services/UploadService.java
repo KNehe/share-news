@@ -18,7 +18,7 @@ public class UploadService {
     }
     
     
-    public String uploadImageWithCloudinary( MultipartFile file) throws Exception {
+    public String uploadImageWithCloudinary(MultipartFile file) throws Exception {
     	
     	try {
     	 var uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap());

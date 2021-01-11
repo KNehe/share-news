@@ -26,6 +26,20 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<exclusions>
+				      <!-- Exclude SLF4j to avoid version conflicts (we have 1.6.6, this drags 
+                in 1.6.1) -->
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<!-- Exclude dom4j to avoid version conflicts (we have 1.6, this drags 
+						in 1.6.1) -->
+				<exclusion>
+					<groupId>dom4j</groupId>
+					<artifactId>dom4j</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -76,6 +90,37 @@
  	    <artifactId>cloudinary-http44</artifactId>
   		<version>1.27.0</version>
 	</dependency>
+
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-websocket</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.webjars</groupId>
+		<artifactId>webjars-locator-core</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.webjars</groupId>
+		<artifactId>sockjs-client</artifactId>
+		<version>1.0.2</version>
+	</dependency>
+	<dependency>
+		<groupId>org.webjars</groupId>
+		<artifactId>stomp-websocket</artifactId>
+		<version>2.3.3</version>
+	</dependency>
+	<dependency>
+		<groupId>org.webjars</groupId>
+		<artifactId>jquery</artifactId>
+		<version>3.1.1-1</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.webjars/font-awesome -->
+<dependency>
+    <groupId>org.webjars</groupId>
+    <artifactId>font-awesome</artifactId>
+    <version>5.15.1</version>
+</dependency>
+	
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
