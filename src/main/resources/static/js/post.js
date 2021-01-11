@@ -102,8 +102,8 @@ const html = `
     <button type="submit">Add</button>
 </form>
 
-<div th:if="" class="DeletePost" onclick="HandleConfirm(event)">
-    <a href="/post/${post.postId}">${post.canDelete ?  'Delete': '' }</a>
+<div th:if="" class="DeletePost" onclick="deletePost(event,${post.postId})">
+    <a>${post.canDelete ?  'Delete': '' }</a>
 </div>
 
 </div>
@@ -162,5 +162,21 @@ const uploadImage = async () =>{
     });
 
     });    
+
+}
+
+const deletePost = async (event, postId) =>{
+
+    const response = confirm("Confirm operation");
+
+    if(response === true){
+        
+     stompClient.send("/app/delete-post",{},JSON.stringify(postId));
+     
+    }else if (response === false){
+        return event.preventDefault();
+    }
+
+;
 
 }

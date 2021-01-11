@@ -109,17 +109,17 @@ public class PostController {
     	
     }
 
-    @GetMapping("/post/{postId}")
-    public  ModelAndView deletePost(@PathVariable Long postId){
+    @MessageMapping("/delete-post")
+    @SendTo("/news-app/get-posts")
+    public  ResponseEntity<?>  deletePost(Long postId,Principal principal){
 
         commentService.deleteCommentByPostId(postId);
         postService.deletePost(postId);
 
-        return new ModelAndView("redirect:/posts");
-
+        return ResponseEntity.ok(postService.getPosts(principal));
     }
 
- @GetMapping("/posts")
+   @GetMapping("/posts")
     public String postsPage(Model model, Principal principal){
 
         model.addAttribute("FirstName", authService.getFirstName(principal.getName()));
