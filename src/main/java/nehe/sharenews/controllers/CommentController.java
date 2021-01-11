@@ -1,11 +1,17 @@
 package nehe.sharenews.controllers;
 
 import nehe.sharenews.models.Comment;
+import nehe.sharenews.models.CommentRequest;
 import nehe.sharenews.models.Post;
 import nehe.sharenews.models.User;
 import nehe.sharenews.services.AuthService;
 import nehe.sharenews.services.CommentService;
+import nehe.sharenews.services.PostService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,34 +24,37 @@ public class CommentController {
 
     private CommentService commentService;
     private AuthService authService;
+    private PostService postService;
+
 
     @Autowired
-    public CommentController(CommentService commentService,AuthService authService) {
+    public CommentController(CommentService commentService,AuthService authService,PostService postService) {
         this.commentService = commentService;
         this.authService =authService;
+        this.postService = postService;
     }
 
-    @PostMapping("/comment")
-    public String addComment(
+    @MessageMapping("/add-comment")
+    @SendTo("/news-app/get-posts")
+    public  ResponseEntity<?> addComment(
                              Principal principal,
-                             @RequestParam("postId") Long postId,
-                             @RequestParam("text") String text){
+                             CommentRequest request){
 
         //user commenting
         var user = authService.findUserByEmail(principal.getName());
-
         var comment = new Comment();
-        comment.setComment(text);
+        comment.setComment(request.getText());
         comment.setUser(user);
 
         //Which post is user commenting
         var post = new Post("","",new User());
-        post.setId(postId);
+        post.setId(request.getPostId());
 
         comment.setPost(post);
 
         commentService.addComment(comment);
-        return "redirect:/posts";
+        
+        return ResponseEntity.ok(postService.getPosts(principal));
     }
 
     @GetMapping("/post/{postId}/comments")

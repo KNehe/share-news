@@ -92,13 +92,10 @@ const html = `
 
 <div class="AddCommentSection">
 
-<form  action="/comment" method="post" >
+<form onsubmit="addComment(event,${post.postId})">
 
     <label for="text"></label>
-    <input type="text" name="text" id="texx t" placeholder="Add a comment" required>
-
-    <input type="hidden" name="postId" value="${post.postId}">
-
+    <input type="text" name="text" id="commentText" placeholder="Add a comment" required onchange="getCommentText(event)">
     <button type="submit">Add</button>
 </form>
 
@@ -165,7 +162,7 @@ const uploadImage = async () =>{
 
 }
 
-const deletePost = async (event, postId) =>{
+const deletePost =  (event, postId) =>{
 
     const response = confirm("Confirm operation");
 
@@ -179,4 +176,14 @@ const deletePost = async (event, postId) =>{
 
 ;
 
+}
+
+let commentText;
+const getCommentText = (event) =>{
+    commentText = event.target.value;
+}
+
+const addComment = (event,postId) =>{
+  event.preventDefault();
+   stompClient.send("/app/add-comment",{},JSON.stringify({postId,"text":commentText}));
 }
