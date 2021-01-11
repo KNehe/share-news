@@ -88,13 +88,15 @@ input[type='file']{
 }
 
 #ImageUpload{
-    width: auto;
     padding:10px;
     background-color: rgba(200,200,200,0.6);
     color: black;
     border-radius: var(--radius);
     box-shadow: 1px 3px 3px rgba(0,0,0,0.2);
     transition: background-color .3s ease-in;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #ImageUpload:hover{

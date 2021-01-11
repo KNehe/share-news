@@ -100,7 +100,7 @@ const html = `
 </form>
 
 <div th:if="" class="DeletePost" onclick="deletePost(event,${post.postId})">
-    <a>${post.canDelete ?  'Delete': '' }</a>
+    <a>${post.canDelete ?  '<span class="fa fa-trash"></span>': '' }</a>
 </div>
 
 </div>

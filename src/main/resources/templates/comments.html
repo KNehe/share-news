@@ -8,9 +8,11 @@
     <link rel="stylesheet"  th:href="@{/styles/common.css}"  />
     <link rel="stylesheet"  th:href="@{/styles/navbar.css}"  />
     <link rel="stylesheet"  th:href="@{/styles/comments.css}"  />
+    <link rel="stylesheet" th:href="@{/styles/font-awesome/css/font-awesome.min.css}">
 
     <script defer src="/js/navbar.js"></script>
     <script defer src="/js/post.js"></script>
+    
 </head>
 <body>
 
@@ -57,7 +59,8 @@
                         <p th:text="${Comment.text}" ></p>
                         <a th:if="${Comment.canDelete}"
                            th:href="@{'/post/' + ${Post.postId} } + '/comment/' + ${Comment.id}"
-                           onclick="HandleConfirm(event)">Delete</a>
+                           onclick="HandleConfirm(event)"><span class="fa fa-trash"></span></a>
+                           
                     </div>
 
                 </div>
