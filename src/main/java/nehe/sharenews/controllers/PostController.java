@@ -103,7 +103,7 @@ public class PostController {
 
         }catch (Exception e){
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Failure("An error occurred while uploading ima"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Failure("An error occurred while uploading image"));
         }       
 
     	
